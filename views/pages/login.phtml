@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>connexion</title>
+    <link rel="stylesheet" href="../../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/iconfonts/simple-line-icon/css/simple-line-icons.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="../../assets/vendors/icheck/skins/all.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../assets/images/Vipp-Data.png" />
+    <style>
+        .card-body {
+            width: 25%;
+            height: auto;
+            margin: 0 auto;
+            margin-top: 6rem;
+        }
+
+        form {
+            margin-top: 2rem;
+        }
+
+        .auth_check {
+            display: flex;
+            gap: 0.4rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+            margin-left: 0.7rem;
+            color: #8B0000;
+        }
+
+        .forms_header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            color: #543f92;
+            margin-top: 1rem;
+            opacity: 0.90;
+            font-weight: 900;
+        }
+
+        .input {
+            border-radius: 2rem;
+            border: 0.1rem solid rgb(10, 10, 10);
+            height: 3rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .connect_form {
+            max-width: 1400px;
+            display: flex;
+            margin: 6rem auto;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .vdata_image_left {
+            width: 60%;
+        }
+
+        .submit {
+            text-align: center;
+        }
+
+        .btn {
+            width: 48%;
+            height: 2.5rem;
+            border-radius: 0.7rem;
+        }
+
+        .btn_remove {
+            background-color: #8B0000;
+            color: white
+        }
+
+        @media only screen and (max-width: 800px) {
+            .vdata_image_left {
+                display: none;
+            }
+
+            .connect_form {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="connect_form">
+        <div class="vdata_image_left">
+            <img width="90%" height="100%" src="../../assets/images/data-analyst.png" alt="">
+        </div>
+        <div class="card-body">
+            <div class="forms_header">
+                <img width="250px" height="120px" src="../../assets/images/Vipp-Data.png" alt="">
+                <h1>Connexion</h1>
+            </div>
+
+
+            <form class="forms-sample" action="" method="POST">
+                <div class="form-group">
+                    <label for="pseudo"> Pseudo:</label>
+                    <input type="text" name="pseudo" id="pseudo" class="form-control input" placeholder="Entrer Pseudo">
+                </div>
+                <div class="form-group">
+                    <label for="_password">Password</label>
+                    <input type="password" name="_password" id="_password" class="form-control input" placeholder="Password">
+                </div>
+                <?php if (isset($_GET['invalid'])) { ?>
+                    <div class="auth_check">
+                        <img width="30px" height="30px" src="../../assets/images/images.jpeg" alt="">
+                        <span style="font-weight:900; text-align: end;">Pseudo ou password incorrect</span>
+                    </div>
+                <?php } ?>
+                <div class="submit">
+                    <button type="submit" class="btn btn-success mr-2 btn">Se Connecter</button>
+                    <button class="btn btn-light btn btn_remove ">Annuler</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../../assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script src="../../assets/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../../assets/js/file-upload.js"></script>
+    <script src="../../assets/js/iCheck.js"></script>
+    <script src="../../assets/js/typeahead.js"></script>
+    <script src="../../assets/js/select2.js"></script>
+    <!-- End custom js for this page-->
+</body>
+
+</html>

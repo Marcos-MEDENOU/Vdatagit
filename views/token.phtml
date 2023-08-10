@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class="w-full min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+        <div>
+            <img src="../assets/images/Vipp-Data.png" alt="" srcset="" class="w-48 py-8">
+        </div>
+
+        <div class="w-2/6 bg-white rounded-lg shadow-sm p-8">
+            <div class="flex justify-between items-center">
+                <h1 class="font-bold tracking-wider lg:text-2xl text-light">vdata tokens</h1>
+            </div>
+            <div class="flex flex-col mt-5 gap-7 text-sm">
+                <div class="bg-green-50 flex justify-between items-center p-3 rounded-sm shadow-sm">
+                    <div class="flex justify-start items-center gap-2">
+
+                        <div>
+                            <p class="text-gray-700 font-bold tracking-wider">Energie</p>
+                        </div>
+                    </div><span class="token_decompte font-bold text-green-500  text-xl">
+                        <span id="enjo">-</span>
+                        <span id="enhe">-</span>
+                        <span id="enmi">-</span>
+                        <span id="ense">-</span>
+                    </span>
+                </div>
+                <div class="bg-green-50 flex justify-between items-center p-3 rounded-sm shadow-sm">
+                    <div class="flex justify-start items-center gap-2">
+
+                        <div>
+                            <p class="text-gray-700 font-bold tracking-wider">Bytel</p>
+                        </div>
+                    </div><span class="token_decompte font-bold text-green-500  text-xl">
+                        <span id="byjo">-</span>
+                        <span id="byhe">-</span>
+                        <span id="bymi">-</span>
+                        <span id="byse">-</span>
+                    </span>
+                </div>
+                <div class="bg-green-50 flex justify-between items-center p-3 rounded-sm shadow-sm">
+                    <div class="flex justify-start items-center gap-2">
+
+                        <div>
+                            <p class="text-gray-700 font-bold tracking-wider ">Free</p>
+                        </div>
+                    </div><span class="token_decompte font-bold text-green-500  text-xl">
+                        <span id="frjo">-</span>
+                        <span id="frhe">-</span>
+                        <span id="frmi">-</span>
+                        <span id="frse">-</span>
+                    </span>
+                </div>
+
+
+
+            </div>
+        </div>
+        <a href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('disconnect') ?>">
+            <button class="flex items-center justify-center item-center h-12 px-6 w-64 bg-red-600 mt-8 rounded font-semibold text-sm text-blue-100 hover:bg-[#6A6A94]">Deconnexion</button>
+        </a>
+
+    </div>
+    <script src="../assets/js/tailwind.js"></script>
+
+    <script>
+        function tokenWatch(token, date, id_elements) {
+            //Stockage du token actuel dans une variable
+            let token_actuel = token;
+            // let token_actuel = 5184000;
+            //Convertion en timestamps de la date d'acquisition du token
+            let date_acquisition = new Date(date);
+            let timestamp_date_acquisition = date_acquisition.getTime() / 1000;
+            //Additionner la date actuelle en timestamps et le token actuel
+            let timest_expiry = timestamp_date_acquisition + token_actuel;
+
+            let jo = document.getElementById(id_elements[0]);
+            let he = document.getElementById(id_elements[1]);
+            let mi = document.getElementById(id_elements[2]);
+            let se = document.getElementById(id_elements[3]);
+
+            //zone app
+            // let apphe = document.getElementById('apphe');
+            // let appjo = document.getElementById('appjo');
+            // let appmi = document.getElementById('appmi');
+            // let appse = document.getElementById('appse');
+
+            // créer un objet Date à partir du timestamp (en millisecondes)
+            let dates = new Date(timest_expiry * 1000);
+
+            // définir la date de fin
+            let date_fin = dates.getTime();
+
+            // mettre à jour le compte à rebours toutes les secondes
+            let interval = setInterval(function() {
+
+                // obtenir la date et l'heure actuelles
+                let maintenant = new Date().getTime();
+
+                // calculer la différence entre la date de fin et la date actuelle
+                let difference = date_fin - maintenant;
+
+                // calculer les jours, les heures, les minutes et les secondes restantes
+                let jours = Math.floor(difference / (1000 * 60 * 60 * 24));
+                let heures = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                let secondes = Math.floor((difference % (1000 * 60)) / 1000);
+
+                // afficher le compte à rebours dans le DOM
+                jo.innerText = jours + "j :";
+                he.innerText = heures + "h :";
+                mi.innerText = minutes + "m :";
+                se.innerText = secondes + "s";
+                // si la date de fin est atteinte, afficher un message et arrêter le compte à rebours
+                if (difference < 0) {
+                    clearInterval(interval);
+                    let alert = document.getElementById('token_decompte');
+                    alert.innerText = "Le token a expiré";
+                    console.log("Le compte à rebours est terminé !");
+                }
+            }, 1000);
+        }
+        tokenWatch(5183170, 'July 24, 2023 00:00:00', ['enjo', 'enhe', 'enmi', 'ense'])
+        tokenWatch(5132854, 'July 29, 2023 00:00:00', ['byjo', 'byhe', 'bymi', 'byse'])
+        tokenWatch(5132854, 'August 07, 2023 00:00:00', ['frjo', 'frhe', 'frmi', 'frse'])
+    </script>
+</body>
+
+</html>

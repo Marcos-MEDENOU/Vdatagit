@@ -1,0 +1,877 @@
+<?php
+
+if (!isset($_SESSION["auth"])) {
+  header('location:index.php?goto=login&target=login');
+  exit();
+}
+
+use controller\crypt;
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>VDATA Admin Dashboard</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/simple-line-icon/css/simple-line-icons.css">
+  <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.addons.css">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../assets/images/Vipp-Data.png" />
+  <style>
+    #user_dash {
+      margin: 1rem 0 auto;
+      text-align: center;
+      /* margin-left: 1.5rem; */
+      display: flex;
+      justify-content: center;
+    }
+
+    #flag {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    .nom_operateur {
+      display: flex;
+      align-items: center;
+    }
+
+    .token {
+      margin-left: 2rem;
+      font-size: 1rem;
+    }
+
+    .token_decompte {
+      background-color: #F9322C;
+      color: white;
+      padding: 0.2rem;
+      border-radius: 0.2rem;
+
+    }
+
+    .nom_operateur>div {
+      margin-bottom: 0.5rem;
+      ;
+    }
+
+    .nom_operateur>p {
+      margin-left: 0.5rem;
+    }
+
+    .nombre_abonne {
+      padding-block: 0.8rem;
+      margin-inline: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
+        <a class="navbar-brand brand-logo" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>">
+          <img src="../assets/images/Vipp-Data.png" id="vdata_log" alt="logo" />
+        </a>
+      </div>
+
+      <div class="navbar-menu-wrapper d-flex align-items-center">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+
+        <?php
+        if (isset($_GET['data_type'])) {
+          if ($this->datadecrypt($_GET['data_type']) == 'data_collected') { ?>
+            <ul class="navbar-nav d-none d-md-block">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="LanguageDropdown" data-toggle="dropdown" aria-expanded="false" href="index.php?goto=
+                <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>">
+                  <!-- <i class="flag-icon flag-icon-us"></i> -->
+                  <img src="../assets/images/facebook.png" class="flag-icon" id="flag" alt="">
+                  <span>Facebook</span>
+                </a>
+                <div class="dropdown-menu navbar-dropdown pb-0 m-0" aria-labelledby="LanguageDropdown">
+
+                  <a class="dropdown-item preview-item px-3 py-0" href="index.php?goto=
+                <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected_tiktok') ?>">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon">
+                        <img src="../assets/images/tik-tok.png" class="flag-icon" id="flag" alt="">
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="font-weight-light mb-0 small-text">
+                        tiktok
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </li>
+
+            </ul>
+          <?php } else if ($this->datadecrypt($_GET['data_type']) == 'data_collected_tiktok') { ?>
+            <ul class="navbar-nav d-none d-md-block">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="LanguageDropdown" data-toggle="dropdown" aria-expanded="false" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected_tiktok') ?>">
+                  <!-- <i class="flag-icon flag-icon-us"></i> -->
+                  <img src="../assets/images/tik-tok.png" class="flag-icon" id="flag" alt="">
+                  <span>tiktok</span>
+                </a>
+                <div class="dropdown-menu navbar-dropdown pb-0 m-0" aria-labelledby="LanguageDropdown">
+
+                  <a class="dropdown-item preview-item px-3 py-0" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon">
+                        <img src="../assets/images/facebook.png" class="flag-icon" id="flag" alt="">
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="font-weight-light mb-0 small-text">
+                        Facebook
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          <?php } else { ?>
+            <ul class="navbar-nav d-none d-md-block">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="LanguageDropdown" data-toggle="dropdown" aria-expanded="false" href="index.php?goto=
+                <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>">
+                  <!-- <i class="flag-icon flag-icon-us"></i> -->
+                  <img src="../assets/images/facebook.png" class="flag-icon" id="flag" alt="">
+                  <span>Facebook</span>
+                </a>
+                <div class="dropdown-menu navbar-dropdown pb-0 m-0" aria-labelledby="LanguageDropdown">
+
+                  <a class="dropdown-item preview-item px-3 py-0" href="index.php?goto=
+                <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected_tiktok') ?>">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon">
+                        <img src="../assets/images/tik-tok.png" class="flag-icon" id="flag" alt="">
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="font-weight-light mb-0 small-text">
+                        tiktok
+                      </p>
+                    </div>
+                  </a>
+                </div>
+              </li>
+            </ul>
+        <?php }
+        } ?>
+
+
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <?php if (isset($_SESSION["auth"])) : ?>
+              <?php if ($adminUsername['user_role'] == "admin") : ?>
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell-outline" id="cloche"></i>
+
+                  <span class="count" id="spancount"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+
+                  <div class="dropdown-divider"></div>
+
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-danger">
+                        <i class="mdi mdi-alert-circle-outline mx-0">.</i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content" id="notif_cont">
+
+                      <h6 class="preview-subject font-weight-medium text-dark" id="notification"></h6>
+                      <p class="font-weight-light small-text" id="time">
+
+                      </p>
+
+                    </div>
+                  </a>
+
+                </div>
+              <?php endif ?>
+            <?php endif ?>
+          </li>
+          <li class="nav-item search-wrapper d-none d-md-block">
+            <form action="#">
+              <div class="form-group mb-0">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <!-- <i class="mdi mdi-magnify"></i> -->
+                    </span>
+                  </div>
+                  <!-- <input type="text" class="form-control" placeholder="Search"> -->
+                </div>
+              </div>
+            </form>
+          </li>
+          <li class="nav-item dropdown d-none d-xl-inline-block user-dropdown">
+            <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+              <div class="dropdown-toggle-wrapper">
+                <div class="inner">
+                  <img class="img-xs rounded-circle" src="../assets/images/admin_image.jpg" alt="Profile image">
+                </div>
+                <div class="inner user_prof">
+                  <div class="inner">
+                    <span class="profile-text font-weight-bold bold">
+                      <?php echo ($adminUsername['pseudo']) ?>
+                    </span>
+                    <small class="profile-text small"><?php echo ($adminUsername['user_role']) ?></small>
+                  </div>
+                  <div class="inner">
+                    <div class="icon-wrapper">
+                      <i class="mdi mdi-chevron-down"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+
+              <a class="dropdown-item" id="user_dash" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('disconnect') ?>">
+                Deconnexion
+              </a>
+
+            </div>
+          </li>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close mdi mdi-close"></i>
+          <div class="d-flex align-items-center justify-content-between border-bottom">
+            <p class="settings-heading font-weight-bold border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Template Skins</p>
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options selected" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
+          <p class="settings-heading font-weight-bold mt-2">Header Skins</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles primary"></div>
+            <div class="tiles success"></div>
+            <div class="tiles warning"></div>
+            <div class="tiles danger"></div>
+            <div class="tiles pink"></div>
+            <div class="tiles info"></div>
+            <div class="tiles dark"></div>
+            <div class="tiles default"></div>
+          </div>
+        </div>
+      </div>
+      <!-- partial -->
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas sidebar-dark" id="sidebar">
+        <ul class="nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected')?>&app=<?=""?>">
+              <i class="menu-icon icon-diamond"></i>
+              <span class="menu-title surlign">Dashboard</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <i class="menu-icon icon-grid"></i>
+              <span class="menu-title">Data</span>
+            </a>
+            <div class="collapse" id="tables">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('table') ?>&data_type=<?= $this->datacrypt('data_collected
+                  ') ?>">Facebook Data table</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('table') ?>&data_type=<?= $this->datacrypt('data_collected_tiktok') ?>">Tiktok Data table</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
+
+          <!-- <li class="nav-item"> -->
+          <!-- <a class="nav-link" data-toggle="collapse" href="index.php?goto=dashboard&target=disconnect" aria-expanded="false" aria-controls="general-pages">
+              <i class="menu-icon  icon-logout"></i>
+              <span class="menu-title">Deconnect</span>
+            </a> -->
+          <!-- <a class="nav-link" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('disconnect') ?>"><i class="menu-icon  icon-logout"></i><span class="menu-title">Deconnect</span></a> -->
+          <!-- </li> -->
+          <?php if (isset($_SESSION["auth"])) : ?>
+            <?php if ($adminUsername['user_role'] == "admin") : ?>
+              <li class="nav-item">
+                <a class="nav-link" href="index.php?goto= <?= $this->datacrypt('login') ?>&target=<?= $this->datacrypt('ajout') ?>"><i class="menu-icon  icon-user"></i><span class="menu-title">Ajout utilisateur</span></a>
+
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index.php?goto= <?= $this->datacrypt('users') ?>&target=<?= $this->datacrypt('list') ?>"><i class="menu-icon  icon-lock"></i><span class="menu-title">Gestion utilisateur</span></a>
+              </li>
+            <?php endif ?>
+          <?php endif ?>
+
+
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row mb-4">
+            <div class="col-12 d-flex align-items-center justify-content-between">
+              <h4 class="page-title">Dashboard</h4>
+              <!-- app-zone -->
+              <!-- <div>
+                <a href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=''" class="btn btn-secondary btn-rounded btn-fw">Tout</a>
+                <a href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('leadconnect') ?>" class="btn btn-danger btn-rounded btn-fw">leadconnect</a>
+                <a href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('freelead') ?>" class="btn btn-success btn-rounded btn-fw">freelead</a>
+              </div> -->
+
+              <div class="card-body">
+              
+                <div class="template-demo">
+                  <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <?= $this->datadecrypt($_GET["app"])? $this->datadecrypt($_GET["app"]): "Tout" ?>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=''">Tout</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('energie') ?>">ENERGIE</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('bytel') ?>">BYTEL</a>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('bytel&bouygues')?>">BOUYGUES_LEADS_DATA</a>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('bytel&free') ?>">FREE_LEADS_DATA</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('free') ?>">FREE</a>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('free&bouygues') ?>">BOUYGUES_LEADS_DATA</a>
+                      <a class="dropdown-item" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $this->datacrypt('free&freeleads') ?>">FREE_LEADS_DATA</a>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <!-- app-zone -->
+              <div class="d-flex align-items-center">
+                <?php if (isset($_SESSION["auth"])) : ?>
+                  <?php if ($adminUsername['user_role'] == "admin") : ?>
+                    <?php if (isset($_GET["app"]) && ($this->datadecrypt($_GET["app"]) === 'free' ||
+                    $this->datadecrypt($_GET["app"]) === 'free&bouygues' ||
+                    $this->datadecrypt($_GET["app"]) === 'free&freeleads' )){ ?>
+                      <span class="token">Le token expire dans :
+
+                        <span class="token_decompte">
+
+                          <span id="appjo">-</span>
+                          <span id="apphe">-</span>
+                          <span id="appmi">-</span>
+                          <span id="appse">-</span>
+
+                        </span>
+                      </span>
+                    <?php } else { ?>
+
+                      <span class="token">Le token expire dans :
+
+                        <span class="token_decompte">
+                          <span id="jo">-</span>
+                          <span id="he">-</span>
+                          <span id="mi">-</span>
+                          <span id="se">-</span>
+                        </span>
+                      </span>
+                    <?php  } ?>
+                  <?php endif ?>
+                <?php endif ?>
+                <div class="wrapper mr-4 d-none d-sm-block">
+
+
+                  <?php if (isset($_GET['data_type'])) {
+                    if ($this->datadecrypt($_GET['data_type']) == 'data_collected') {
+                  ?>
+                      <!-- ajout de app pour scinder les recherches  -->
+                      <form action="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target= <?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>
+                      <?php if (isset($_GET["app"])) {
+                        echo "&app=" . ($_GET["app"]);
+                      } else {
+                        echo '';
+                      } ?>
+                      " method="POST">
+                        <!-- <form action="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target= <?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected') ?>&app=<?= $_GET["app"] ?  $this->datacrypt($_GET["app"]) : " " ?>" method="POST"> -->
+                        <label for="date_debut" class="mb-0"> Début: </label>
+                        <input type="datetime-local" name="date_debut" step="1" value=<?php
+                                                                                      if (isset($_POST['valider'])) {
+                                                                                        echo $date_debut;
+                                                                                      } else {
+                                                                                        echo "";
+                                                                                      }
+
+                                                                                      ?>>
+                        <label for="date_fin" class="mb-0"> Fin: </label>
+                        <input type="datetime-local" name="date_fin" step="1" value=<?php
+                                                                                    if (isset($_POST['valider'])) {
+                                                                                      echo $date_fin;
+                                                                                    } else {
+                                                                                      echo "";
+                                                                                    }
+
+                                                                                    ?>>
+                        <button name="valider" class="btn btn-link btn-sm font-weight-bold">Valider</button>
+                      </form>
+                    <?php } else if ($this->datadecrypt($_GET['data_type']) == 'data_collected_tiktok') { ?>
+
+                      <form action="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target= <?= $this->datacrypt('dashboard') ?>&data_type=<?= $this->datacrypt('data_collected_tiktok') ?>" method="POST">
+                        <label for="date_debut" class="mb-0"> Début: </label>
+                        <input type="datetime-local" name="date_debut" step="1" value=<?php
+                                                                                      if (isset($_POST['valider'])) {
+                                                                                        echo $date_debut;
+                                                                                      } else {
+                                                                                        echo "";
+                                                                                      }
+
+                                                                                      ?>>
+                        <label for="date_fin" class="mb-0"> Fin: </label>
+                        <input type="datetime-local" name="date_fin" step="1" value=<?php
+                                                                                    if (isset($_POST['valider'])) {
+                                                                                      echo $date_fin;
+                                                                                    } else {
+                                                                                      echo "";
+                                                                                    }
+
+                                                                                    ?>>
+                        <button name="valider" class="btn btn-link btn-sm font-weight-bold">Valider</button>
+                      </form>
+                      <!-- ajout de app pour scinder les recherches  -->
+                  <?php }
+                  } ?>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 card-statistics">
+              <div class="row">
+                <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card card-tile">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between pb-2">
+                        <?php if (isset($_GET['data_type']))
+                          if ($this->datadecrypt($_GET['data_type']) == 'data_collected') : ?>
+                          <h5>Total des collectes Facebook</h5>
+                        <?php else : ?>
+                          <h5>Total des collectes Tiktok</h5>
+                        <?php endif ?>
+                        <i class="icon-docs"></i>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <?php if (isset($count)) : ?>
+                          <p class="text-muted"><?= $count['total'] ?></p>
+
+                        <?php endif ?>
+                      </div>
+                      <div class="progress progress-md">
+                        <div class="progress-bar bg-info w-25" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card card-tile">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between pb-2">
+                        <h5>Total intégration Nixxis</h5>
+                        <i class="icon-pie-chart"></i>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <?php if (isset($nixx)) : ?>
+                          <?php foreach ($nixx as $values) : ?>
+                            <p class="text-muted"><?= $values ?></p>
+                          <?php endforeach ?>
+                        <?php endif ?>
+                      </div>
+                      <div class="progress progress-md">
+                        <div class="progress-bar bg-success w-25" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card card-tile">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between pb-2">
+                        <h5>Total des Doublons</h5>
+                        <i class="icon-wallet"></i>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <?php if (isset($dbl)) : ?>
+                          <?php foreach ($dbl as $values) : ?>
+                            <p class="text-muted"><?= $values ?></p>
+                          <?php endforeach ?>
+                        <?php endif ?>
+                      </div>
+                      <div class="progress progress-md">
+                        <div class="progress-bar bg-warning w-25" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card card-tile">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between pb-2">
+                        <h5>Total des erreurs d'intégration</h5>
+                        <i class="icon-screen-desktop"></i>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <?php if (isset($err)) : ?>
+                          <?php foreach ($err as $values) : ?>
+                            <p class="text-muted"><?= $values ?></p>
+                          <?php endforeach ?>
+                        <?php endif ?>
+                      </div>
+                      <div class="progress progress-md">
+                        <div class="progress-bar bg-danger w-25" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Statistics Enregistrements</h6>
+                  <div class="w-75 mx-auto mt-4">
+                    <div class="d-flex justify-content-between text-center mb-2">
+                      <div class="wrapper">
+                        <h4><?= $count['total'] ?></h4>
+                        <small class="text-muted">Total Enregistrements</small>
+                      </div>
+                      <div class="wrapper">
+                        <h4><?= $dbl['total'] ?></h4>
+                        <small class="text-muted">Total Doublons</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="morris-line-example"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between pb-4">
+                    <h4 class="card-title mb-0">Pourcentage</h4>
+                    <!-- <p class="mb-0">Last 6 day
+                      <i class="mdi mdi-chevron-down"></i>
+                    </p> -->
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="inner flex-grow">
+                              <p class="mb-0">Pourcentage d'intégration Nixxis</p>
+                              <!-- <h4 class="font-weight-bold">16543</h4> -->
+                              <?php if (isset($nixx)) : ?>
+                                <?php foreach ($nixx as $values) : ?>
+                                  <h4 class="font-weight-bold"><?= $values ?></h4>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                            </div>
+                            <div class="inner d-flex align-items-center">
+                              <h1 class="text-success font-weight-bold "><?= round($pourcentageNixxis) ?>%</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="inner flex-grow">
+                              <p class="mb-0">Pourcentage de doublons Nixxis</p>
+                              <h4 class="font-weight-bold"><?= $dblNixxis ?></h4>
+                            </div>
+                            <div class="inner d-flex align-items-center">
+                              <h1 class="text-warning font-weight-bold"><?= round($pourcentageDoublonNixxis) ?>%</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 grid-margin-sm-down stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="inner flex-grow">
+                              <?php if (isset($_GET['data_type']))
+                                if ($this->datadecrypt($_GET['data_type']) == 'data_collected') : ?>
+                                <p class="mb-0">Pourcentage de doublons Facebook</p>
+                              <?php else : ?>
+                                <p class="mb-0">Pourcentage de doublons Tiktok</p>
+                              <?php endif ?>
+
+                              <h4 class="font-weight-bold"><?= $dblfacebook ?></h4>
+                            </div>
+                            <div class="inner d-flex align-items-center">
+                              <h1 class="text-warning font-weight-bold"><?= round($pourcentageDoublonFacebook) ?>%</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 grid-margin-sm-down stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="inner flex-grow">
+                              <p class="mb-0">Pourcentage d'erreur d'intégration Nixxis</p>
+                              <!-- <h4 class="font-weight-bold">12790</h4> -->
+                              <?php if (isset($err)) : ?>
+                                <?php foreach ($err as $values) : ?>
+                                  <h4 class="font-weight-bold"><?= $values ?></h4>
+                                <?php endforeach ?>
+                              <?php endif ?>
+                            </div>
+                            <div class="inner d-flex align-items-center">
+                              <h1 class="text-danger font-weight-bold"><?= round($pourcentageErreurIntegration) ?>%</h1>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card support-pane-card">
+              <?php if (isset($_SESSION["auth"])) : ?>
+                <?php if ($adminUsername['user_role'] == "admin") : ?>
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h4 class="card-title mb-0">Details Opérateur</h4>
+                    </div>
+                    <div class="table-responsive support-pane no-wrap">
+                      <div class="t-row">
+
+                        <div class="content">
+                          <p class="font-weight-bold mb-2 d-inline-block">Fournisseur d'accès internet</p>
+                          <?php if (isset($nom_operateur)) : ?>
+                            <?php foreach ($nom_operateur as $key => $values) : ?>
+                              <div class="nom_operateur">
+                                <div class="img-sm rounded-circle bg-info d-flex align-items-center justify-content-center text-white">FAI</div>
+                                <p class="font-weight-bold "><?= $nom_operateur[$key]['fai_actuel'] ?></p>
+                              </div>
+                            <?php endforeach ?>
+                          <?php endif ?>
+                        </div>
+                        <div class="tile">
+                          <p class="font-weight-bold mb-2 d-inline-block">Nombre d'abonnés</p>
+                          <?php if (isset($abonne_operateur)) : ?>
+                            <?php foreach ($abonne_operateur as $key => $values) : ?>
+
+                              <p class="text-muted mb-2 nombre_abonne"><?= $abonne_operateur[$key]['COUNT(id)'] ?></p>
+
+                            <?php endforeach ?>
+                          <?php endif ?>
+                        </div>
+                        <div class="tile">
+                          <p class="font-weight-bold"> Durée effectuée en générale</p>
+                          <?php if (isset($temps)) : ?>
+                            <?php foreach ($temps as  $key => $values) : ?>
+                              <p class="text-muted mb-2 nombre_abonne"><?= $temps[$key]['fai_actuel_val'] ?></p>
+                            <?php endforeach ?>
+                          <?php endif ?>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                <?php endif ?>
+              <?php endif ?>
+            </div>
+          </div>
+        </div>
+
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="container-fluid clearfix">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2023
+              <a href="">VippData</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Statistics
+              <i class="mdi mdi-heart-outline text-danger"></i>
+            </span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+  <script src="../assets/vendors/js/vendor.bundle.addons.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="../assets/js/off-canvas.js"></script>
+  <script src="../assets/js/hoverable-collapse.js"></script>
+  <script src="../assets/js/misc.js"></script>
+  <script src="../assets/js/settings.js"></script>
+  <script src="../assets/js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../assets/js/dashboard.js"></script>
+  <!-- End custom js for this page-->
+  <script>
+    let lastRecords = [];
+    let locked = false;
+    $('#spancount').hide();
+
+    $('#notification , #cloche ').click(function() {
+      $('#spancount').fadeOut();
+    });
+    $('#notif_cont').click(function() {
+      $('#notification , #time').hide();
+    });
+
+    function checkLastRecords() {
+      if (!locked) {
+        locked = true;
+        // Appeler la méthode du contrôleur pour récupérer les enregistrements les plus récents
+        $.get('index.php?goto=<?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('notification') ?>', function(data) {
+          // Comparer les résultats avec les enregistrements précédents
+          if (JSON.stringify(data) == JSON.stringify(lastRecords)) {
+            let now = new Date();
+            // Afficher une notification si aucun enregistrement n'a été ajoutés
+            $('#spancount').show();
+            $('#notification').text('Aucun nouvel enrégistrement depuis 30 minute!');
+            $('#time').text(now);
+            $('#notification , #time').show();
+            console.log(lastRecords);
+          }
+          // Stocker les résultats pour la prochaine requête
+          lastRecords = data;
+          // Déverrouiller la variable de verrouillage
+          locked = false;
+        });
+      }
+
+
+    }
+
+
+    function tokenWatch(token, date, id_elements) {
+      //Stockage du token actuel dans une variable
+      let token_actuel = token;
+      // let token_actuel = 5184000;
+      //Convertion en timestamps de la date d'acquisition du token
+      let date_acquisition = new Date(date);
+      let timestamp_date_acquisition = date_acquisition.getTime() / 1000;
+      //Additionner la date actuelle en timestamps et le token actuel
+      let timest_expiry = timestamp_date_acquisition + token_actuel;
+
+      let he = document.getElementById(id_elements[0]);
+      let jo = document.getElementById(id_elements[1]);
+      let mi = document.getElementById(id_elements[2]);
+      let se = document.getElementById(id_elements[3]);
+
+      //zone app
+      // let apphe = document.getElementById('apphe');
+      // let appjo = document.getElementById('appjo');
+      // let appmi = document.getElementById('appmi');
+      // let appse = document.getElementById('appse');
+
+      // créer un objet Date à partir du timestamp (en millisecondes)
+      let dates = new Date(timest_expiry * 1000);
+
+      // définir la date de fin
+      let date_fin = dates.getTime();
+
+      // mettre à jour le compte à rebours toutes les secondes
+      let interval = setInterval(function() {
+
+        // obtenir la date et l'heure actuelles
+        let maintenant = new Date().getTime();
+
+        // calculer la différence entre la date de fin et la date actuelle
+        let difference = date_fin - maintenant;
+
+        // calculer les jours, les heures, les minutes et les secondes restantes
+        let jours = Math.floor(difference / (1000 * 60 * 60 * 24));
+        let heures = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        let secondes = Math.floor((difference % (1000 * 60)) / 1000);
+
+        // afficher le compte à rebours dans le DOM
+        jo.innerText = jours + "j :";
+        he.innerText = heures + "h :";
+        mi.innerText = minutes + "m :";
+        se.innerText = secondes + "s";
+        // si la date de fin est atteinte, afficher un message et arrêter le compte à rebours
+        if (difference < 0) {
+          clearInterval(interval);
+          let alert = document.getElementById('token_decompte');
+          alert.innerText = "Le token a expiré";
+          console.log("Le compte à rebours est terminé !");
+        }
+      }, 1000);
+    }
+    tokenWatch(5184000, 'June 05, 2023 11:49:00', ['he', 'jo', 'mi', 'se'])
+    tokenWatch(5183604, 'July 11, 2023 00:00:00', ['apphe', 'appjo', 'appmi', 'appse'])
+    setInterval(checkLastRecords, 1800000)
+  </script>
+</body>
+
+</html>

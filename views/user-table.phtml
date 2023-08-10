@@ -1,0 +1,349 @@
+<?php
+
+if (!isset($_SESSION["auth"])) {
+  header('location:index.php?goto=login&target=login');
+  exit();
+}
+
+use controller\crypt;
+?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>VDATA Admin Dashboard</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="../assets/vendors/iconfonts/simple-line-icon/css/simple-line-icons.css">
+  <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.addons.css">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../assets/images/Vipp-Data.png" />
+  <style>
+    #user_dash {
+      margin: 1rem 0 auto;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    #flag {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
+
+        <a class="navbar-brand brand-logo" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>">
+          <img src="../assets/images/Vipp-Data.png" id="vdata_log" alt="logo" />
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi  mdi-menu"></span>
+        </button>
+
+        
+
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item search-wrapper d-none d-md-block">
+            <form action="#">
+              <div class="form-group mb-0">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <!-- <i class="mdi mdi-magnify"></i> -->
+                    </span>
+                  </div>
+                  <!-- <input type="text" class="form-control" placeholder="Search"> -->
+                </div>
+              </div>
+            </form>
+          </li>
+          <li class="nav-item dropdown d-none d-xl-inline-block user-dropdown">
+            <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+              <div class="dropdown-toggle-wrapper">
+                <div class="inner">
+                  <img class="img-xs rounded-circle" src="../assets/images/admin_image.jpg" alt="Profile image">
+                </div>
+                <div class="inner user_prof">
+                  <div class="inner">
+                    <span class="profile-text font-weight-bold bold">
+                      <?php echo ($adminUsername['pseudo']) ?>
+                    </span>
+                    <small class="profile-text small"><?php echo ($adminUsername['user_role']) ?></small>
+                  </div>
+
+                  <div class="inner">
+                    <div class="icon-wrapper">
+                      <i class="mdi mdi-chevron-down"></i>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+
+              <a class="dropdown-item" id="user_dash" href="index.php?goto= <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('disconnect') ?>">
+                Deconnexion
+              </a>
+            </div>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close mdi mdi-close"></i>
+          <div class="d-flex align-items-center justify-content-between border-bottom">
+            <p class="settings-heading font-weight-bold border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Template Skins</p>
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options selected" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
+          <p class="settings-heading font-weight-bold mt-2">Header Skins</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles primary"></div>
+            <div class="tiles success"></div>
+            <div class="tiles warning"></div>
+            <div class="tiles danger"></div>
+            <div class="tiles pink"></div>
+            <div class="tiles info"></div>
+            <div class="tiles dark"></div>
+            <div class="tiles default"></div>
+          </div>
+        </div>
+      </div>
+      <!-- partial -->
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas sidebar-dark" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('dashboard') ?>">
+              <i class="menu-icon icon-diamond"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <i class="menu-icon icon-grid"></i>
+              <span class="menu-title">Data</span>
+            </a>
+            <div class="collapse" id="tables">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('table') ?>">Facebook Data table</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php?goto=
+                  <?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('table') ?>">Tiktok Data table</a>
+                </li>
+
+              </ul>
+            </div>
+          </li>
+
+
+
+          <!-- <li class="nav-item"> -->
+          <!-- <a class="nav-link" data-toggle="collapse" href="index.php?goto=dashboard&target=disconnect" aria-expanded="false" aria-controls="general-pages">
+              <i class="menu-icon  icon-logout"></i>
+              <span class="menu-title">Deconnect</span>
+            </a> -->
+          <!-- <a class="nav-link" href="index.php?goto=<?= $this->datacrypt('dashboard') ?>&target=<?= $this->datacrypt('disconnect') ?>"><i class="menu-icon  icon-logout"></i> <span class="menu-title">Deconnect</span></a> -->
+
+          <!-- </li> -->
+          <?php if(isset($_SESSION["auth"])):?>
+          <?php if($adminUsername['user_role']=="admin"):?>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?goto= <?=$this->datacrypt('login')?>&target=<?=$this->datacrypt('ajout')?>"><i class="menu-icon  icon-user"></i><span class="menu-title">Ajout utilisateur</span></a>
+           
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="index.php?goto= <?=$this->datacrypt('users')?>&target=<?=$this->datacrypt('list')?>"><i class="menu-icon  icon-lock"></i><span class="menu-title">Gestion utilisateur</span></a>
+          </li>
+          <?php endif?>
+          <?php endif?>
+
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <!-- <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div id="date">
+                    <div class="card">
+                      <div class="card-body user_table">
+                        <h4 class="card-title">User Table</h4>
+                        <div class="table-responsive">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Pseudo</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php foreach ($data as $key => $values) { ?>
+                                <tr>
+                                  <td><?= $data[$key]['user_name'] ?></td>
+                                  <td><?= $data[$key]['user_surname'] ?></td>
+                                  <td><?= $data[$key]['pseudo'] ?></td>
+                                  <td>
+                                    <label class="badge  badge-primary font-weight-bold "><?= $data[$key]['user_role'] ?></label>
+                                  </td>
+                                  <td>
+                                    <button class="btn  btn-sm font-weight-bold badge-danger">Supprimer</button>
+                                  </td>
+                                </tr>
+                              <?php } ?>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Gestion des utilisateur</h4>
+                  <p class="card-description">
+                    Users table
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                          Nom
+                          </th>
+                          <th>
+                          Prénom
+                          </th>
+                          <th>
+                          Pseudo
+                          </th>
+                          <th>
+                          Role
+                          </th>
+                          <th>
+                          Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php foreach ($data as $key => $values) { ?>
+                        <tr>
+                          <td class="py-1">
+                          <?= $data[$key]['user_name'] ?>
+                          </td>
+                          <td>
+                          <?= $data[$key]['user_surname'] ?>
+                          </td>
+                          <td>
+                           
+                            <?= $data[$key]['pseudo'] ?>
+                          
+                          </td>
+                          <td>
+                            <?php if($data[$key]['user_role']=='admin'){?>
+                            <div  class="badge btn badge-warning font-weight-bold " >
+                                <?= $data[$key]['user_role'] ?>
+                              </div>
+                            <?php ;}else{?>
+                              <div  class="badge btn badge-success font-weight-bold " >
+                                <?= $data[$key]['user_role'] ?>
+                              </div>
+                            <?php ;}?>
+                          </td>
+                          <td>
+                          <button class="btn btn-sm font-weight-bold badge-danger"><a style="color:white;" href="index.php?goto=<?= $this->datacrypt('users') ?>&target= <?= $this->datacrypt('delete') ?> &pseudo=<?= $this-> datacrypt($data[$key]['pseudo'])?>">Supprimer</a></button>
+                          </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2023
+                <a href="">VippData</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Statistics
+                <i class="mdi mdi-heart-outline text-danger"></i>
+              </span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+
+    <!-- plugins:js -->
+    <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../assets/js/off-canvas.js"></script>
+    <script src="../assets/js/hoverable-collapse.js"></script>
+    <script src="../assets/js/misc.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script src="../assets/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../assets/js/dashboard.js"></script>
+    <!-- End custom js for this page-->
+    <script src="../assets/js/data-table.js"></script>
+</body>
+
+</html>
